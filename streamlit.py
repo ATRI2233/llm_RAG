@@ -14,7 +14,9 @@ from langchain_community.chat_models import ChatZhipuAI
 #检索器
 def get_retriever():
     # 定义 Embeddings
-    embedding = ZhipuAIEmbeddings()
+    embedding = ZhipuAIEmbeddings(
+        model="embedding-2",
+        api_key=os.getenv("ZHIPUAI_API_KEY"),)
     # 向量数据库持久化路径
     persist_directory = 'data_base/vector_db/chroma'
     if not os.path.exists(persist_directory):
