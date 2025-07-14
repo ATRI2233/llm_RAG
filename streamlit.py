@@ -11,12 +11,14 @@ import sys
 from langchain_community.embeddings import ZhipuAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_community.chat_models import ChatZhipuAI
+API = st.secrets["ZHIPUAI_API_KEY"] #os.getenv("ZHIPUAI_API_KEY")
+
 #检索器
 def get_retriever():
     # 定义 Embeddings
     embedding = ZhipuAIEmbeddings(
         model="embedding-2",
-        api_key=os.getenv("ZHIPUAI_API_KEY"),)
+        api_key=os.getenv("API"),)
     # 向量数据库持久化路径
     persist_directory = 'data_base/vector_db/chroma'
     if not os.path.exists(persist_directory):
@@ -36,7 +38,7 @@ def get_qa_history_chain():
     llm = ChatZhipuAI(
     temperature = 0,
     model = "glm-4-flash-250414",
-    zhipuai_api_key = os.getenv("ZHIPUAI_API_KEY"),
+    zhipuai_api_key = os.getenv("API"),
 )
     condense_question_system_template = (
         "请根据聊天记录总结用户最近的问题，"
