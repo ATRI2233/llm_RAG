@@ -18,7 +18,7 @@ def get_retriever():
     # 向量数据库持久化路径
     persist_directory = 'data_base/vector_db/chroma'
     if not os.path.exists(persist_directory):
-        os.makedirs(persist_directory)
+        os.makedirs(persist_directory, exist_ok=True)
     # 加载数据库
     vectordb = Chroma(
         persist_directory=persist_directory,
@@ -54,7 +54,7 @@ def get_qa_history_chain():
     system_prompt = (
         "你是一个问答任务的助手。 "
         "请使用检索到的上下文片段回答这个问题。 "
-        "如果你不知道答案就说不知道。 "
+        "如果你不知道答案就自己想办法回答。 "
         "请使用简洁的话语回答用户。"
         "\n\n"
         "{context}"
@@ -88,7 +88,7 @@ def gen_response(chain, input, chat_history):
             yield res["answer"]
 
 def main():
-    st.markdown('### 🦜🔗 动手学大模型应用开发')
+    st.markdown('### 🦜🔗 千禧年研发部天童爱丽丝')
     # st.session_state可以存储用户与应用交互期间的状态与数据
     # 存储对话历史
     if "messages" not in st.session_state:
@@ -119,3 +119,4 @@ def main():
             output = st.write_stream(answer)
         # 将输出存入st.session_state.messages
         st.session_state.messages.append(("ai", output))
+main()
