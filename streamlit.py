@@ -91,10 +91,10 @@ def get_qa_history_chain():
         | StrOutputParser()
     )
 
-    qa_history_chain = RunnablePassthrough().assign(
+    qa_chain_retriver = RunnablePassthrough().assign(
         context = retrieve_docs, 
         ).assign(answer=qa_chain)
-    return qa_history_chain
+    return qa_chain_retriver
 
 def gen_response(chain, input, chat_history):
     response = chain.stream({
@@ -112,8 +112,8 @@ def main():
     if "messages" not in st.session_state:
         st.session_state.messages = []
     # 存储检索问答链
-    if "qa_history_chain" not in st.session_state:
-        st.session_state.qa_history_chain = get_qa_history_chain()
+    if "qa_chain_retriver" not in st.session_state:
+        st.session_state.qa_chain_retriver = get_qa_history_chain()
     # 建立容器 高度为500 px
     messages = st.container(height=550)
     # 显示整个对话历史
@@ -128,7 +128,7 @@ def main():
             st.write(prompt)
         # 生成回复
         answer = gen_response(
-            chain=st.session_state.qa_history_chain,
+            chain=st.session_state.qa_chain_retriver,
             input=prompt,
             chat_history=st.session_state.messages
         )
