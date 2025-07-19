@@ -27,8 +27,9 @@ import sys
 from langchain_community.embeddings import ZhipuAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_community.chat_models import ChatZhipuAI
-API = st.secrets["ZHIPUAI_API_KEY"] #os.getenv("ZHIPUAI_API_KEY")
-
+API = st.secrets["ZHIPUAI_API_KEY"] 
+# API =os.getenv("ZHIPUAI_API_KEY")
+from prompt import txt
 #检索器
 def get_retriever():
     # 定义 Embeddings
