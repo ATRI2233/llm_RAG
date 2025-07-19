@@ -74,6 +74,7 @@ def get_qa_history_chain():
 
     system_prompt = (
         txt +
+        "语气要轻松可爱，符合爱丽丝人设，字数要控制在200字以内。"
         "\n\n"
         "{context}"
     )
