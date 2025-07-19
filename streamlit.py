@@ -6,6 +6,14 @@ try:
     sys.modules['sqlite3'] = sqlite3
 except ImportError:
     pass  # 如果 pysqlite3 没装，就忽略，继续用系统自带的 sqlite3
+import sys
+
+# 安全替换 sqlite3 模块（仅在 pysqlite3 可用时）
+try:
+    import pysqlite3 as sqlite3
+    sys.modules['sqlite3'] = sqlite3
+except ImportError:
+    pass  # 如果 pysqlite3 没装，就忽略，继续用系统自带的 sqlite3
 import streamlit as st
 from langchain_openai import ChatOpenAI
 import os
@@ -19,8 +27,7 @@ import sys
 from langchain_community.embeddings import ZhipuAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_community.chat_models import ChatZhipuAI
-API = os.getenv("ZHIPUAI_API_KEY") #st.secrets["ZHIPUAI_API_KEY"] 
-from prompt import txt
+API = st.secrets["ZHIPUAI_API_KEY"] #os.getenv("ZHIPUAI_API_KEY")
 
 #检索器
 def get_retriever():
