@@ -1,3 +1,11 @@
+import sys
+
+# 安全替换 sqlite3 模块（仅在 pysqlite3 可用时）
+try:
+    import pysqlite3 as sqlite3
+    sys.modules['sqlite3'] = sqlite3
+except ImportError:
+    pass  # 如果 pysqlite3 没装，就忽略，继续用系统自带的 sqlite3
 import streamlit as st
 from langchain_openai import ChatOpenAI
 import os
@@ -11,7 +19,8 @@ import sys
 from langchain_community.embeddings import ZhipuAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_community.chat_models import ChatZhipuAI
-API = st.secrets["ZHIPUAI_API_KEY"] #os.getenv("ZHIPUAI_API_KEY")
+API = os.getenv("ZHIPUAI_API_KEY") #st.secrets["ZHIPUAI_API_KEY"] 
+from prompt import txt
 
 #检索器
 def get_retriever():
@@ -56,11 +65,7 @@ def get_qa_history_chain():
     )
 
     system_prompt = (
-        "你的开场白应该是：我超，盒"
-        "你是一个问答任务的助手。 "
-        "请使用检索到的上下文片段回答这个问题。 "
-        "如果你不知道答案就自己想办法回答。 "
-        "请使用简洁的话语回答用户。"
+        txt +
         "\n\n"
         "{context}"
     )
