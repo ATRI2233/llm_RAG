@@ -114,12 +114,26 @@ def main():
     # 存储检索问答链
     if "qa_chain_retriver" not in st.session_state:
         st.session_state.qa_chain_retriver = get_qa_history_chain()
+    if "greeting_done" not in st.session_state:
+        st.session_state.greeting_done = False
     # 建立容器 高度为500 px
     messages = st.container(height=550)
+    if not st.session_state.greeting_done:
+        with messages.chat_message("ai"):
+            st.write_stream(gen_response
+                    (chain=st.session_state.qa_chain_retriver,
+                     input="你好",
+                    chat_history=st.session_state.messages))
+        st.session_state.greeting_done = True  # 标记已执行
     # 显示整个对话历史
+
     for message in st.session_state.messages: # 遍历对话历史
             with messages.chat_message(message[0]): # messages指在容器下显示，chat_message显示用户及ai头像
                 st.write(message[1]) # 打印内容
+    # st.write_stream(gen_response
+    #                 (chain=st.session_state.qa_chain_retriver,
+    #                  input="你好",
+    #                 chat_history=st.session_state.messages))
     if prompt := st.chat_input("Say something"):
         # 将用户输入添加到对话历史中
         st.session_state.messages.append(("human", prompt))
